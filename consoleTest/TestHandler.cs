@@ -1,4 +1,4 @@
-﻿using EasyNetworker.Shared.Abstractions;
+﻿using EasyNetworker.Abstractions;
 
 namespace consoleTest;
 public class TestHandler : IPacketHandler<TestPacket>

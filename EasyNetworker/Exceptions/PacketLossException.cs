@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasyNetworker.Shared.Exceptions;
+namespace EasyNetworker.Exceptions;
 public class PacketLossException : Exception
 {
     public PacketLossException(Exception e) : base(e.Message, e)

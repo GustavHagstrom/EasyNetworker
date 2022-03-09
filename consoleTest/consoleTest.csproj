@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EasyNetworker.Shared\EasyNetworker.Shared.csproj" />
+    <ProjectReference Include="..\EasyNetworker\EasyNetworker.csproj" />
   </ItemGroup>
 
 </Project>

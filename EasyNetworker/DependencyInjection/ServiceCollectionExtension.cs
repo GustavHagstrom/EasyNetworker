@@ -1,10 +1,10 @@
-﻿using EasyNetworker.Shared.Abstractions;
-using EasyNetworker.Shared.Services;
-using EasyNetworker.Shared.Utilities;
+﻿using EasyNetworker.Abstractions;
+using EasyNetworker.Services;
+using EasyNetworker.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace EasyNetworker.Shared.DependencyInjection;
+namespace EasyNetworker.DependencyInjection;
 public static class ServiceCollectionExtension
 {
     public static IServiceCollection AddEasyNetworker(this IServiceCollection services)
@@ -12,6 +12,10 @@ public static class ServiceCollectionExtension
         services.TryAddTransient<ServiceFactory>(p => p.GetRequiredService);
         services.AddTransient<IHandlerInvokerService, HandlerInvokerService>();
         services.AddTransient<ISerializerService, SerializerService>();
+        services.AddTransient<ITcpListenerService, TcpListenerService>();
+        services.AddTransient<ITcpSenderService, TcpSenderService>();
+        services.AddTransient<IUdpListenerService, UdpListenerService>();
+        services.AddTransient<IUdpSenderService, UdpSenderService>();
         return services;
     }
     public static IServiceCollection RegisterPacketHandler<THandler, Payload>(this IServiceCollection services) where THandler : IPacketHandler<Payload>

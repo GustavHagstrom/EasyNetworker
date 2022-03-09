@@ -1,5 +1,5 @@
 ﻿namespace EasyNetworker;
-public class Class1
+public class ServerClient
 {
 
 }

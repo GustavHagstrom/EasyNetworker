@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using EasyNetworker.Shared.DependencyInjection;
 using consoleTest;
 using EasyNetworker.Shared.Abstractions;
+using EasyNetworker.DependencyInjection;
 
 var serviceProvider = new ServiceCollection()
             .AddSingleton<ConsoleApp>()

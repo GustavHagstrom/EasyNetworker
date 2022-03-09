@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasyNetworker.Shared.DependencyInjection;
+namespace EasyNetworker.Shared;
 
 public delegate object ServiceFactory(Type ServiceType);
 public static class ServiceFactoryExtensions

@@ -1,5 +1,5 @@
 ﻿namespace EasyNetworker.Shared.Models;
-public class HandlePayoadDescription
+public class HandlePayloadDescription
 {
     public Type? PayloadType { get; set; }
     public Type? HandlerType { get; set; }

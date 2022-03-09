@@ -1,10 +1,11 @@
-﻿using EasyNetworker.Shared.Abstractions;
+﻿using EasyNetworker.Shared;
+using EasyNetworker.Shared.Abstractions;
 using EasyNetworker.Shared.Services;
 using EasyNetworker.Shared.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace EasyNetworker.Shared.DependencyInjection;
+namespace EasyNetworker.DependencyInjection;
 public static class ServiceCollectionExtension
 {
     public static IServiceCollection AddEasyNetworker(this IServiceCollection services)

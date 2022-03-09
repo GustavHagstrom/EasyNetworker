@@ -1,7 +1,7 @@
-﻿using EasyNetworker.Shared.Abstractions;
-using EasyNetworker.Shared.Models;
+﻿using EasyNetworker.Abstractions;
+using EasyNetworker.Models;
 
-namespace EasyNetworker.Shared.Utilities;
+namespace EasyNetworker.Utilities;
 public class Mappings
 {
     public static Mappings Instance { get; } = new();

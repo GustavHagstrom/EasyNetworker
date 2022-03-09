@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EasyNetworker.Shared;
+﻿namespace EasyNetworker;
 
 public delegate object ServiceFactory(Type ServiceType);
 public static class ServiceFactoryExtensions

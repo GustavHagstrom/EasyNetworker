@@ -1,25 +1,32 @@
-﻿using System.Net;
-using System.Net.Sockets;
+﻿using EasyNetworker.Abstractions;
+using System.Net;
 
 namespace EasyNetworker;
-public class UserClient
+public class UserClient : ITcpSenderService, IUdpSenderService
 {
-    public UserClient()
-    {
+    private readonly ITcpSenderService tcpSenderService;
+    private readonly IUdpSenderService udpSenderService;
 
+    public UserClient(ITcpSenderService tcpSenderService, IUdpSenderService udpSenderService)
+    {
+        this.tcpSenderService = tcpSenderService;
+        this.udpSenderService = udpSenderService;
     }
+
     public void SendTcp<T>(IPEndPoint remoteEndPoint, T paylaod)
     {
-        using (var tcp = new TcpClient())
-        {
-            tcp.Connect(remoteEndPoint);
-        }
+        tcpSenderService.SendTcp(remoteEndPoint, paylaod);
+    }
+    public async Task SendTcpAsync<T>(IPEndPoint remoteEndPoint, T paylaod)
+    {
+        await tcpSenderService.SendTcpAsync(remoteEndPoint, paylaod);
     }
     public void SendUdp<T>(IPEndPoint remoteEndPoint, T paylaod)
     {
-        using (var udp = new UdpClient())
-        {
-
-        }
+        udpSenderService.SendUdp(remoteEndPoint, paylaod);
+    }
+    public async Task SendUdpAsync<T>(IPEndPoint remoteEndPoint, T paylaod)
+    {
+        await udpSenderService.SendUdpAsync(remoteEndPoint, paylaod);
     }
 }

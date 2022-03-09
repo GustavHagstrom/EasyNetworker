@@ -1,6 +1,4 @@
-﻿using EasyNetworker.Shared.Abstractions;
-
-namespace consoleTest;
+﻿namespace consoleTest;
 public class TestPacket
 {
     public string MyString => "Lol this is my string";

@@ -24,7 +24,7 @@ public class TcpListenerService : ITcpListenerService
     public async Task StartContinuousReceivingAsync(IPEndPoint localEndPoint, CancellationToken? cancellationToken = null)
     {
         RestartListener(localEndPoint);
-        while (cancellationToken?.IsCancellationRequested == false)
+        while (cancellationToken?.IsCancellationRequested == false || cancellationToken == null)
         {
             var client = await Client!.AcceptTcpClientAsync();
             ReceiveAndInvokeHandler(client);

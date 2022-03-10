@@ -4,6 +4,6 @@ namespace EasyNetworker.Abstractions;
 
 public interface ITcpSenderService
 {
-    void SendTcp<T>(IPEndPoint remoteEndPoint, T paylaod);
-    Task SendTcpAsync<T>(IPEndPoint remoteEndPoint, T paylaod);
+    void Send<T>(IPEndPoint remoteEndPoint, T paylaod);
+    Task SendAsync<T>(IPEndPoint remoteEndPoint, T paylaod);
 }

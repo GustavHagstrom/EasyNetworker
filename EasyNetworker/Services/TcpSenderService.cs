@@ -11,11 +11,11 @@ public class TcpSenderService : ITcpSenderService
     {
         this.serializerService = serializerService;
     }
-    public async Task SendTcpAsync<T>(IPEndPoint remoteEndPoint, T paylaod)
+    public async Task SendAsync<T>(IPEndPoint remoteEndPoint, T paylaod)
     {
-        await Task.Run(() => SendTcp(remoteEndPoint, paylaod));
+        await Task.Run(() => Send(remoteEndPoint, paylaod));
     }
-    public void SendTcp<T>(IPEndPoint remoteEndPoint, T paylaod)
+    public void Send<T>(IPEndPoint remoteEndPoint, T paylaod)
     {
         using (var tcp = new TcpClient())
         {

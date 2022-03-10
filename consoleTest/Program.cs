@@ -24,15 +24,16 @@ public class ConsoleApp
     }
     public void Run()
     {
-        var address = IPAddress.Parse("127.0.0.1");
-        var localEndPoint = new IPEndPoint(address, 50001);
-        var remoteEndPoint = new IPEndPoint(address, 50001);
-        networkerClient.StartContinuousUdpReceiving(localEndPoint);
+        //var address = IPAddress.Any;// .Parse("192.168.0.109");
+        var localEndPoint = new IPEndPoint(IPAddress.Parse("192.168.0.131"), 50000);
+        var remoteEndPoint = new IPEndPoint(IPAddress.Parse("192.168.0.131"), 50000);
+        networkerClient.StartContinuousTcpReceiving(localEndPoint);
         while (true)
         {
             //networkerClient.ReceiveUdpOnce(localEndPoint);
-            packet.MyString = Console.ReadKey().KeyChar.ToString();
-            //networkerClient.SendUdp(remoteEndPoint, packet);
+            packet.MyString = Console.ReadKey().KeyChar.ToString()!;
+            //networkerClient.SendTcp(remoteEndPoint, packet);
+            networkerClient.SendTcpAsync(remoteEndPoint, packet);
         }
     }
 }

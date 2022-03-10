@@ -1,5 +1,6 @@
 ﻿using EasyNetworker.Abstractions;
 using System.Net;
+using System.Net.Sockets;
 
 namespace EasyNetworker;
 public class NetworkerClient : INetworkerClient

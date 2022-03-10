@@ -21,12 +21,12 @@ public class UserClient : ITcpSenderService, IUdpSenderService
     {
         await tcpSenderService.SendAsync(remoteEndPoint, paylaod);
     }
-    public void SendUdp<T>(IPEndPoint remoteEndPoint, T paylaod)
+    public void Send<T>(IPEndPoint remoteEndPoint, T paylaod)
     {
-        udpSenderService.SendUdp(remoteEndPoint, paylaod);
+        udpSenderService.Send(remoteEndPoint, paylaod);
     }
-    public async Task SendUdpAsync<T>(IPEndPoint remoteEndPoint, T paylaod)
+    public async Task SendAsync<T>(IPEndPoint remoteEndPoint, T paylaod)
     {
-        await udpSenderService.SendUdpAsync(remoteEndPoint, paylaod);
+        await udpSenderService.SendAsync(remoteEndPoint, paylaod);
     }
 }

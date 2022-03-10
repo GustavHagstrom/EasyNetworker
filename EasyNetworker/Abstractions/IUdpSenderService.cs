@@ -4,6 +4,6 @@ namespace EasyNetworker.Abstractions;
 
 public interface IUdpSenderService
 {
-    void SendUdp<T>(IPEndPoint remoteEndPoint, T paylaod);
-    Task SendUdpAsync<T>(IPEndPoint remoteEndPoint, T paylaod);
+    void Send<T>(IPEndPoint remoteEndPoint, T paylaod);
+    Task SendAsync<T>(IPEndPoint remoteEndPoint, T paylaod);
 }

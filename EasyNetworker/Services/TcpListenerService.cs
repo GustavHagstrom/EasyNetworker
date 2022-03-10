@@ -33,12 +33,23 @@ public class TcpListenerService : ITcpListenerService
     }
     private void ReceiveAndInvokeHandler(TcpClient client)
     {
-        var stream = client.GetStream();
-        byte[] buffer = new byte[stream.Length];
-        stream.Read(buffer, 0, buffer.Length);
-        int id = BitConverter.ToInt32(buffer.Take(4).ToArray());
-        object receivedObject = serializerService.DeserializeReceivedBytes(buffer);
+        List<byte> receivedBytes = new();
+        receivedBytes.AddRange(FillBuffer(client));
+        int id = BitConverter.ToInt32(receivedBytes.Take(4).ToArray());
+        int length = BitConverter.ToInt32(receivedBytes.Skip(4).Take(4).ToArray());
+        while (receivedBytes.Count < length)
+        {
+            receivedBytes.AddRange(FillBuffer(client));
+        }
+        object receivedObject = serializerService.DeserializeReceivedBytes(receivedBytes.ToArray());
         handlerInvokerService.Invoke(receivedObject, id);
+    }
+    private byte[] FillBuffer(TcpClient client)
+    {
+        var stream = client.GetStream();
+        byte[] buffer = new byte[8192];
+        stream.Read(buffer, 0, buffer.Length);
+        return buffer;
     }
     private void RestartListener(IPEndPoint localEndPoint)
     {

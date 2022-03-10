@@ -32,10 +32,15 @@ public class ConsoleApp
     }
     public void Run()
     {
-        //var endPoint = new IPEndPoint(new IPAddress()"", 5050);
-        tcpListenerService1.StartContinuousReceivingAsync(endPoint);
-        tcpSenderService.SendTcp(endPoint, packet);
-        Console.ReadKey();
+        var address = IPAddress.Parse("192.168.0.131");
+        var endPoint = new IPEndPoint(address, 5050);
+        while (true)
+        {
+            tcpListenerService1.ReceiveOnce(endPoint);
+        }
+        
+        //tcpSenderService.SendTcp(endPoint, packet);
+        //Console.ReadKey();
         //handlerInvokerService.Invoke(packet, 1);
         //var bytes = serializerService.SerializePayload(packet);
         //var obj = serializerService.DeserializeReceivedBytes(bytes);

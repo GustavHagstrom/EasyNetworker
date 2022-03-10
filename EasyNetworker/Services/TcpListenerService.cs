@@ -43,6 +43,7 @@ public class TcpListenerService : ITcpListenerService
         }
         object receivedObject = serializerService.DeserializeReceivedBytes(receivedBytes.ToArray());
         handlerInvokerService.Invoke(receivedObject, id);
+        client.Dispose();
     }
     private byte[] FillBuffer(TcpClient client)
     {

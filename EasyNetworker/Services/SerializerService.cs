@@ -1,4 +1,5 @@
 ﻿using EasyNetworker.Abstractions;
+using EasyNetworker.Exceptions;
 using EasyNetworker.Utilities;
 using System.Text;
 using System.Text.Json;
@@ -28,6 +29,10 @@ public class SerializerService : ISerializerService
         int id = BitConverter.ToInt32(receivedBytes.Take(4).ToArray(), 0);
         int length = BitConverter.ToInt32(receivedBytes.Skip(4).Take(4).ToArray(), 0);
         var jsonString = Encoding.UTF8.GetString(receivedBytes.Skip(8).Take(length-8).ToArray());
+        if (receivedBytes.Length != length)
+        {
+            throw new PacketLossException($"Packetlength \"{receivedBytes.Length}\" do not match expected length of: \"{length}\"");
+        }
         return JsonSerializer.Deserialize(jsonString, Mappings.Instance.GetPayloadType(id))!;
     }
 }

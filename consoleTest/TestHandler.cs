@@ -5,6 +5,6 @@ public class TestHandler : IPacketHandler<TestPacket>
 {
     public void Handle(TestPacket packet)
     {
-        Console.WriteLine(packet.MyString);
+        Console.Write(packet.MyString);
     }
 }

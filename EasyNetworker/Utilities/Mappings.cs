@@ -6,16 +6,15 @@ public class Mappings
 {
     public static Mappings Instance { get; } = new();
     private Mappings() { }
-    private int Count { get; set; } = 0;
     private Dictionary<int, HandlePayloadDescription> DescriptionMap { get; } = new();
     private Dictionary<Type, int> PayloadIdMap { get; } = new();
     private Dictionary<int, Type> IdPayloadMap { get; } = new();
     public void Register<THandler, Payload>() where THandler : IPacketHandler<Payload>
     {
-        Count += 1;
-        DescriptionMap.Add(Count, new() {PayloadType = typeof(Payload), HandlerType = typeof(THandler) });
-        PayloadIdMap.Add(typeof(Payload), Count);
-        IdPayloadMap.Add(Count, typeof(Payload));
+        int hashCode = typeof(THandler).GetHashCode();
+        DescriptionMap.Add(hashCode, new() {PayloadType = typeof(Payload), HandlerType = typeof(THandler) });
+        PayloadIdMap.Add(typeof(Payload), hashCode);
+        IdPayloadMap.Add(hashCode, typeof(Payload));
     }
     public HandlePayloadDescription GetPacketsDescription(int packetId)
     {

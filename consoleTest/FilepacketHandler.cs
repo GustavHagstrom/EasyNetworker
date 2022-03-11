@@ -6,18 +6,16 @@ public class FilepacketHandler : IPacketHandler<FilePacket>
 {
     public void Handle(FilePacket packet)
     {
-        string filename = packet.Name + packet.FileExtension;
         int count = 1;
-        while (File.Exists(filename+packet.FileExtension))
+        while (File.Exists(packet.FullName))
         {
-            filename = $"{packet.Name} ({count++})";
+            packet.Name = $"{packet.Name} ({count++})";
         }
-        packet.Name = filename;
 
-        File.WriteAllBytes(packet.Name, packet.Bytes);
+        File.WriteAllBytes(packet.FullName, packet.Bytes);
         new Process
         {
-            StartInfo = new ProcessStartInfo(packet.Name+packet.FileExtension)
+            StartInfo = new ProcessStartInfo(packet.FullName)
             {
                 UseShellExecute = true,
             }

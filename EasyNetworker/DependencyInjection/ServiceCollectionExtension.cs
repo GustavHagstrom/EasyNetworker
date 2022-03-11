@@ -9,6 +9,7 @@ public static class ServiceCollectionExtension
 {
     public static IServiceCollection AddEasyNetworker(this IServiceCollection services)
     {
+        //EnableAppInFirewall();
         services.TryAddTransient<ServiceFactory>(p => p.GetRequiredService);
         services.AddTransient<IHandlerInvokerService, HandlerInvokerService>();
         services.AddTransient<ISerializerService, SerializerService>();

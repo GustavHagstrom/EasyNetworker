@@ -14,8 +14,8 @@ public class ConsoleApp
     public void Run()
     {
         //var address = IPAddress.Any;// .Parse("192.168.0.109");
-        var localEndPoint = new IPEndPoint(IPAddress.Parse("192.168.0.131"), 60000);
-        var remoteEndPoint = new IPEndPoint(IPAddress.Parse("192.168.0.109"), 60000);
+        var localEndPoint = new IPEndPoint(IPAddress.Parse("192.168.0.131"), 1);
+        var remoteEndPoint = new IPEndPoint(IPAddress.Parse("192.168.0.109"), 1);
         networkerClient.StartContinuousUdpReceiving(localEndPoint);
         while (true)
         {

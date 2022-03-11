@@ -8,9 +8,9 @@ public class FilepacketHandler : IPacketHandler<FilePacket>
     {
         string filename = packet.Name + packet.FileExtension;
         int count = 1;
-        while (File.Exists(filename))
+        while (File.Exists(filename+packet.FileExtension))
         {
-            filename = $"{packet.Name} ({count++}){packet.FileExtension}";
+            filename = $"{packet.Name} ({count++})";
         }
         packet.Name = filename;
 

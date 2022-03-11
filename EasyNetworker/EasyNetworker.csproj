@@ -1,11 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	  <Version>1.0.1</Version>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Authors>Gustav Hagström</Authors>
-    <Description>A simple labrary for TCP and UDP networking. Used with dependency injection using Micrsoft.Extensions.DependencyInjection.ServiceCollection</Description>
+    <Description>A simple library for TCP and UDP networking. Used with dependency injection using Micrsoft.Extensions.DependencyInjection.ServiceCollection</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryUrl>https://github.com/GustavHagstrom/EasyNetworker</RepositoryUrl>

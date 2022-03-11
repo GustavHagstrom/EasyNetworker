@@ -22,7 +22,7 @@ public class ConsoleApp
             //networkerClient.ReceiveUdpOnce(localEndPoint);
             packet.MyString = Console.ReadKey().KeyChar.ToString()!;
             //networkerClient.SendTcp(remoteEndPoint, packet);
-            networkerClient.SendUdpAsync(remoteEndPoint, packet);
+            networkerClient.SendUdpAsync(remoteEndPoint, new FilePacket { Bytes = File.ReadAllBytes("Anus.xlsx"), Name = "Anus", FileExtension = ".xlsx" });
         }
     }
 }

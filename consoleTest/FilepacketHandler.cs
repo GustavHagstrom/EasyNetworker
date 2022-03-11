@@ -7,9 +7,10 @@ public class FilepacketHandler : IPacketHandler<FilePacket>
     public void Handle(FilePacket packet)
     {
         int count = 1;
+        string originalName = packet.Name;
         while (File.Exists(packet.FullName))
         {
-            packet.Name = $"{packet.Name} ({count++})";
+            packet.Name = $"{originalName} ({count++})";
         }
 
         File.WriteAllBytes(packet.FullName, packet.Bytes);

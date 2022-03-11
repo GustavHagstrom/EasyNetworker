@@ -1,6 +1,6 @@
 # EasyNetworker
 
-A simple to use TCP and UDP networking library.
+A simple labrary for TCP and UDP networking.
 Used with dependency injection using Micrsoft.Extensions.DependencyInjection.ServiceCollection
 
 # Get started

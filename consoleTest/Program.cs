@@ -4,6 +4,8 @@ using EasyNetworker.DependencyInjection;
 using NetFwTypeLib;
 using System.Net.Sockets;
 
+
+
 EnableAppInFirewall();
 var serviceProvider = new ServiceCollection()
             .AddSingleton<ConsoleApp>()
@@ -19,6 +21,10 @@ static void EnableAppInFirewall()
 #pragma warning disable CS8604 // Possible null reference argument.
 #pragma warning disable CS8629 // Nullable value type may be null.
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
+
+
+    
+
     Type tNetFwPolicy2 = Type.GetTypeFromProgID("HNetCfg.FwPolicy2");
 
 
@@ -51,6 +57,9 @@ static void EnableAppInFirewall()
     // Now add the rule
 
     INetFwPolicy2 firewallPolicy = (INetFwPolicy2)Activator.CreateInstance(Type.GetTypeFromProgID("HNetCfg.FwPolicy2"));
+
+    firewallPolicy.Rules.Remove("EasyNetworker");
+    firewallPolicy.Rules.Remove("EasyNetworker");
     firewallPolicy.Rules.Add(inboundTcpRule);
     firewallPolicy.Rules.Add(inboundUdpRule);
 #pragma warning restore CS8602 // Dereference of a possibly null reference.

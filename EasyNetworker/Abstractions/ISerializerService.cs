@@ -1,4 +1,4 @@
-﻿namespace EasyNetworker.Shared.Abstractions;
+﻿namespace EasyNetworker.Abstractions;
 
 public interface ISerializerService
 {

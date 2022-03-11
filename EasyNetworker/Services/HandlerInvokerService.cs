@@ -1,10 +1,8 @@
-﻿using EasyNetworker.Shared.Abstractions;
-using EasyNetworker.Shared.DependencyInjection;
-using EasyNetworker.Shared.Exceptions;
-using EasyNetworker.Shared.Utilities;
-using System.Diagnostics;
+﻿using EasyNetworker.Abstractions;
+using EasyNetworker.Exceptions;
+using EasyNetworker.Utilities;
 
-namespace EasyNetworker.Shared.Services;
+namespace EasyNetworker.Services;
 public class HandlerInvokerService : IHandlerInvokerService
 {
     private readonly ServiceFactory serviceFactory;

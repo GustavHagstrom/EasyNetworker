@@ -1,16 +1,15 @@
-﻿using EasyNetworker.Shared.Abstractions;
-using EasyNetworker.Shared.Models;
+﻿using EasyNetworker.Abstractions;
+using EasyNetworker.Models;
 
-namespace EasyNetworker.Shared.Utilities;
-internal class Mappings
+namespace EasyNetworker.Utilities;
+public class Mappings
 {
     public static Mappings Instance { get; } = new();
     private Mappings() { }
     private int Count { get; set; } = 0;
-    private Dictionary<int, HandlePayoadDescription> DescriptionMap { get; } = new();
+    private Dictionary<int, HandlePayloadDescription> DescriptionMap { get; } = new();
     private Dictionary<Type, int> PayloadIdMap { get; } = new();
     private Dictionary<int, Type> IdPayloadMap { get; } = new();
-
     public void Register<THandler, Payload>() where THandler : IPacketHandler<Payload>
     {
         Count += 1;
@@ -18,7 +17,7 @@ internal class Mappings
         PayloadIdMap.Add(typeof(Payload), Count);
         IdPayloadMap.Add(Count, typeof(Payload));
     }
-    public HandlePayoadDescription GetPacketsDescription(int packetId)
+    public HandlePayloadDescription GetPacketsDescription(int packetId)
     {
         return DescriptionMap[packetId];
     }
@@ -30,5 +29,4 @@ internal class Mappings
     {
         return IdPayloadMap[id];
     }
-
 }

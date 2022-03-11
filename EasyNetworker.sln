@@ -5,6 +5,8 @@ VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyNetworker", "EasyNetworker\EasyNetworker.csproj", "{0DE0587A-AB74-4F9B-B01D-FE47328F8081}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyNetworker.Tests", "EasyNetworker.Tests\EasyNetworker.Tests.csproj", "{D264D4F1-4F6A-4BCF-ABA8-4F29D62C5ACB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0DE0587A-AB74-4F9B-B01D-FE47328F8081}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DE0587A-AB74-4F9B-B01D-FE47328F8081}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DE0587A-AB74-4F9B-B01D-FE47328F8081}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D264D4F1-4F6A-4BCF-ABA8-4F29D62C5ACB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D264D4F1-4F6A-4BCF-ABA8-4F29D62C5ACB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D264D4F1-4F6A-4BCF-ABA8-4F29D62C5ACB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D264D4F1-4F6A-4BCF-ABA8-4F29D62C5ACB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

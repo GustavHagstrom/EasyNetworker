@@ -19,6 +19,6 @@ public class MappingTests
     [Test]
     public void Test1()
     {
-        Mappings.Instance.Register<SampleStringHandler, string>();
+        
     }
 }

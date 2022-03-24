@@ -6,29 +6,25 @@ using System.Net.Sockets;
 namespace EasyNetworker.Services;
 public class TcpSenderService : ITcpSenderService
 {
-    private readonly ISerializerService serializerService;
-    private readonly ILogger<TcpSenderService> logger;
+    private readonly IPacketGeneratorService packetGeneratorService;
 
-    public TcpSenderService(ISerializerService serializerService, ILogger<TcpSenderService> logger)
+    public TcpSenderService(IPacketGeneratorService packetGeneratorService)
     {
-        this.serializerService = serializerService;
-        this.logger = logger;
+        this.packetGeneratorService = packetGeneratorService;
     }
     public async Task SendAsync<T>(IPEndPoint remoteEndPoint, T paylaod)
     {
         
         await Task.Run(() => Send(remoteEndPoint, paylaod));
     }
-    public void Send<T>(IPEndPoint remoteEndPoint, T paylaod)
+    public void Send<T>(IPEndPoint remoteEndPoint, T payload)
     {
         using (var tcp = new TcpClient())
         {
-            var bytesToSend = serializerService.SerializePayload(paylaod);
-            logger.LogInformation($"Establishing Tcp connection to {remoteEndPoint}");
+            var packetBytes = packetGeneratorService.GenerateAsByteArray(payload);
             tcp.Connect(remoteEndPoint);
-            logger.LogInformation("Sending Tcp payload");
             var stream = tcp.GetStream();
-            stream.Write(bytesToSend, 0, bytesToSend.Length);
+            stream.Write(packetBytes, 0, packetBytes.Length);
         }
     }
 }

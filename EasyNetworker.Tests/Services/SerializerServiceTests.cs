@@ -20,17 +20,17 @@ public class SerializerServiceTests
     public void SerializeAndDeserializeTest()
     {
         //Arrange
-        var expectedId = typeof(SampleStringHandler).FullName;
         var expectedPaylaod = "Hello";
         var serializerService = new SerializerService();
+        byte[] buffer = new byte[8192];
 
         //Act
-        var seriBytes = serializerService.SerializePayload(expectedPaylaod);
-        var basePacket = JsonSerializer.Deserialize<BasePacket>(seriBytes);
-        var actualPayload = JsonSerializer.Deserialize(basePacket!.PayloadAsJson, Mappings.Instance.GetPayloadType(basePacket.Id));
+        var seriBytes = serializerService.Serialize(expectedPaylaod);
+        seriBytes.CopyTo(buffer, 0);
+        var actualPayload = serializerService.Deserialize<string>(buffer);
+        
 
         //Assert
-        Assert.That(basePacket!.Id, Is.EqualTo(expectedId));
         Assert.That(actualPayload, Is.EqualTo(expectedPaylaod));
     }
 }

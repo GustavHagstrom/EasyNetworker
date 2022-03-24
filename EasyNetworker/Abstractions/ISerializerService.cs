@@ -4,6 +4,6 @@ namespace EasyNetworker.Abstractions;
 
 public interface ISerializerService
 {
-    BasePacket DeserializeReceivedBytes(byte[] receivedBytes);
-    byte[] SerializePayload<T>(T payload);
+    T Deserialize<T>(byte[] dataBytes);
+    byte[] Serialize<T>(T data);
 }

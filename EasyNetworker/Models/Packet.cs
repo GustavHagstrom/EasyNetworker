@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace EasyNetworker.Models;
-public class BasePacket
+public class Packet
 {
     public string Id { get; set; } = string.Empty;  
-    public string PayloadAsJson { get; set; } = string.Empty;
+    public byte[] Payload { get; set; } = Array.Empty<byte>();
 }

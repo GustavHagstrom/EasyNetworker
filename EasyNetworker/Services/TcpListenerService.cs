@@ -10,22 +10,18 @@ namespace EasyNetworker.Services;
 public class TcpListenerService : ITcpListenerService
 {
     private readonly IHandlerInvokerService handlerInvokerService;
-    private readonly ISerializerService serializerService;
-    private readonly ILogger<TcpListenerService> logger;
+    private readonly IPacketGeneratorService packetGeneratorService;
 
     private TcpListener? Client { get; set; }
-    public TcpListenerService(IHandlerInvokerService handlerInvokerService, ISerializerService serializerService, ILogger<TcpListenerService> logger)
+    public TcpListenerService(IHandlerInvokerService handlerInvokerService, IPacketGeneratorService packetGeneratorService)
     {
         this.handlerInvokerService = handlerInvokerService;
-        this.serializerService = serializerService;
-        this.logger = logger;
+        this.packetGeneratorService = packetGeneratorService;
     }
     public void ReceiveOnce(IPEndPoint localEndPoint)
     {
         RestartListener(localEndPoint);
-        logger.LogInformation($"Starting to listen for incoming Tcp data");
         var client = Client!.AcceptTcpClient();
-        logger.LogInformation($"Incoming Tcp connection from remote endpoint: {client.Client.RemoteEndPoint}");
         ReceiveAndInvokeHandler(client);
         Client?.Stop();
     }
@@ -34,9 +30,7 @@ public class TcpListenerService : ITcpListenerService
         RestartListener(localEndPoint);
         while (cancellationToken?.IsCancellationRequested == false || cancellationToken == null)
         {
-            logger.LogInformation($"Starting to listen for incoming Tcp data");
             var client = await Client!.AcceptTcpClientAsync();
-            logger.LogInformation($"Incoming Tcp connection from remote endpoint: {client.Client.RemoteEndPoint}");
             ReceiveAndInvokeHandler(client);
         }
         Client?.Stop();
@@ -44,9 +38,8 @@ public class TcpListenerService : ITcpListenerService
     private void ReceiveAndInvokeHandler(TcpClient client)
     {
         byte[] receivedBytes = GetReceivedBytes(client);
-        var basePacket = serializerService.DeserializeReceivedBytes(receivedBytes);
-        logger.LogInformation($"Data received with Tcp. PacketId: {basePacket.Id}. Passing to Handler...");
-        handlerInvokerService.Invoke(basePacket);
+        var packet = packetGeneratorService.Generate(receivedBytes);
+        handlerInvokerService.Invoke(packet);
         client.Dispose();
     }
     private byte[] GetReceivedBytes(TcpClient client)

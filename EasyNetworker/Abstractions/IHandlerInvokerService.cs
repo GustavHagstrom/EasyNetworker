@@ -4,5 +4,5 @@ namespace EasyNetworker.Abstractions;
 
 public interface IHandlerInvokerService
 {
-    void Invoke(BasePacket basePacket);
+    void Invoke(Packet basePacket);
 }

@@ -18,6 +18,7 @@ public static class ServiceCollectionExtension
         services.AddTransient<IUdpListenerService, UdpListenerService>();
         services.AddTransient<IUdpSenderService, UdpSenderService>();
         services.AddTransient<INetworkerClient, NetworkerClient>();
+        
         return services;
     }
     public static IServiceCollection RegisterPacketHandler<THandler, Payload>(this IServiceCollection services) where THandler : IPacketHandler<Payload>

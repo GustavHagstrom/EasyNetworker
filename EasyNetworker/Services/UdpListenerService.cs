@@ -8,20 +8,17 @@ namespace EasyNetworker.Services;
 public class UdpListenerService : IUdpListenerService
 {
     private readonly IHandlerInvokerService handlerInvokerService;
-    private readonly ISerializerService serializerService;
-    private readonly ILogger<UdpListenerService> logger;
+    private readonly IPacketGeneratorService packetGeneratorService;
 
-    public UdpListenerService(IHandlerInvokerService handlerInvokerService, ISerializerService serializerService, ILogger<UdpListenerService> logger)
+    public UdpListenerService(IHandlerInvokerService handlerInvokerService, IPacketGeneratorService packetGeneratorService)
     {
         this.handlerInvokerService = handlerInvokerService;
-        this.serializerService = serializerService;
-        this.logger = logger;
+        this.packetGeneratorService = packetGeneratorService;
     }
     public void ReceiveOnce(IPEndPoint localEndPoint)
     {
         using (var client = new UdpClient(localEndPoint))
         {
-            logger.LogInformation($"Starting to listen for incoming Udp data");
             var bytes = client.Receive(ref localEndPoint);
             InvokeHandler(bytes);
         }
@@ -32,7 +29,6 @@ public class UdpListenerService : IUdpListenerService
         {
             while (cancellationToken?.IsCancellationRequested == false || cancellationToken == null)
             {
-                logger.LogInformation($"Starting to listen for incoming Udp data");
                 var result = await client.ReceiveAsync();
                 _ = Task.Run(() => InvokeHandler(result.Buffer));
             }
@@ -40,9 +36,7 @@ public class UdpListenerService : IUdpListenerService
     }
     private void InvokeHandler(byte[] receivedBytes)
     {
-        int id = BitConverter.ToInt32(receivedBytes.Take(4).ToArray());
-        var basePacket = serializerService.DeserializeReceivedBytes(receivedBytes);
-        logger.LogInformation($"Data received with Udp. PacketId: {basePacket.Id}. Passing to Handler...");
-        handlerInvokerService.Invoke(basePacket);
+        var packet = packetGeneratorService.Generate(receivedBytes);
+        handlerInvokerService.Invoke(packet);
     }
 }

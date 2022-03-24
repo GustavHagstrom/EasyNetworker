@@ -14,9 +14,9 @@ public class HandlerInvokerService : IHandlerInvokerService
     {
         this.serviceFactory = serviceFactory;
     }
-    public void Invoke(BasePacket basePacket)
+    public void Invoke(Packet basePacket)
     {
-        var payload = JsonSerializer.Deserialize(basePacket.PayloadAsJson, Mappings.Instance.GetPayloadType(basePacket.Id));
+        var payload = JsonSerializer.Deserialize(basePacket.Payload, Mappings.Instance.GetPayloadType(basePacket.Id));
         var description = Mappings.Instance.GetPacketsDescription(basePacket.Id);
         var handler = serviceFactory(description.HandlerType!);
         try

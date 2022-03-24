@@ -1,24 +1,28 @@
 ﻿using EasyNetworker.Abstractions;
-using EasyNetworker.Exceptions;
-using EasyNetworker.Models;
-using EasyNetworker.Utilities;
-using System.Text;
 using System.Text.Json;
 
 namespace EasyNetworker.Services;
 public class SerializerService : ISerializerService
 {
-    public byte[] SerializePayload<T>(T payload)
+    private const int EndValue = 1;
+    public byte[] Serialize<T>(T payload)
     {
-        string id = Mappings.Instance.GetPayloadId<T>();
-        var basePacket = new BasePacket { Id = id,  PayloadAsJson = JsonSerializer.Serialize(payload) };
-        var jsonBasePacket = JsonSerializer.Serialize(basePacket);
-
-        return Encoding.UTF8.GetBytes(jsonBasePacket);
+        //string id = Mappings.Instance.GetPayloadId<T>();
+        //var basePacket = new Packet { Id = id,  PayloadAsJson = JsonSerializer.Serialize(payload) };
+        return JsonSerializer.SerializeToUtf8Bytes(payload).Concat(BitConverter.GetBytes(EndValue)).ToArray();
     }
-    public BasePacket DeserializeReceivedBytes(byte[] receivedBytes)
+    //public Packet DeserializeReceivedBytes(byte[] receivedBytes)
+    //{
+    //    var index = Array.LastIndexOf(receivedBytes, Convert.ToByte(125));
+    //    var span = receivedBytes.Take(index + 1).ToArray();
+    //    return JsonSerializer.Deserialize<Packet>(span)!;
+    //}
+
+    public T Deserialize<T>(byte[] dataBytes)
     {
-        var jsonBasePacket = Encoding.UTF8.GetString(receivedBytes);
-        return JsonSerializer.Deserialize<BasePacket>(jsonBasePacket)!;
+        var index = Array.LastIndexOf(dataBytes, Convert.ToByte(EndValue));
+        var usedBytes = dataBytes.Take(index).ToArray();
+        //return JsonSerializer.Deserialize<T>(usedBytes)!;
+        return JsonSerializer.Deserialize<T>(usedBytes)!;
     }
 }

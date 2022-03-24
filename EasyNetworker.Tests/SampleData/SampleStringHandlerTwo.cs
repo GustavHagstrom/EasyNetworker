@@ -8,8 +8,15 @@ using System.Threading.Tasks;
 namespace EasyNetworker.Tests.SampleData;
 public class SampleStringHandlerTwo : IPacketHandler<string>
 {
+    public SampleStringHandlerTwo(StringQueueReceiver stringQueueReceiver)
+    {
+        StringQueueReceiver = stringQueueReceiver;
+    }
+
+    public StringQueueReceiver StringQueueReceiver { get; }
+
     public void Handle(string packet)
     {
-        Console.WriteLine(packet);
+        StringQueueReceiver.StringQueue.Enqueue(packet);
     }
 }

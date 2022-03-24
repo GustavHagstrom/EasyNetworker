@@ -11,7 +11,6 @@ public class Mappings
     private Dictionary<string, Type> IdPayloadMap { get; } = new();
     public void Register<THandler, Payload>() where THandler : IPacketHandler<Payload>
     {
-        //int hashCode = typeof(THandler).GetHashCode();
         string id = typeof(THandler).FullName!;
         DescriptionMap.Add(id, new() {PayloadType = typeof(Payload), HandlerType = typeof(THandler) });
         PayloadIdMap.Add(typeof(Payload), id);

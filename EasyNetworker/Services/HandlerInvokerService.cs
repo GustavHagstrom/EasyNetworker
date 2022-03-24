@@ -8,16 +8,18 @@ namespace EasyNetworker.Services;
 public class HandlerInvokerService : IHandlerInvokerService
 {
     private readonly ServiceFactory serviceFactory;
+    private readonly ISerializerService serializerService;
     private const string HandleMethodName = "Handle";
 
-    public HandlerInvokerService(ServiceFactory serviceFactory)
+    public HandlerInvokerService(ServiceFactory serviceFactory, ISerializerService serializerService)
     {
         this.serviceFactory = serviceFactory;
+        this.serializerService = serializerService;
     }
-    public void Invoke(Packet basePacket)
+    public void Invoke(Packet packet)
     {
-        var payload = JsonSerializer.Deserialize(basePacket.Payload, Mappings.Instance.GetPayloadType(basePacket.Id));
-        var description = Mappings.Instance.GetPacketsDescription(basePacket.Id);
+        var payload = serializerService.Deserialize(packet.Payload, Mappings.Instance.GetPayloadType(packet.Id)); 
+        var description = Mappings.Instance.GetPacketsDescription(packet.Id);
         var handler = serviceFactory(description.HandlerType!);
         try
         {

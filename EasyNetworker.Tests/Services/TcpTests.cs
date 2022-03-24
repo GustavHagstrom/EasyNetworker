@@ -5,31 +5,27 @@ using EasyNetworker.Abstractions;
 using System.Net;
 using System.Threading.Tasks;
 using System.Threading;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EasyNetworker.Tests.Services;
 public class TcpTests
 {
-    
-    [SetUp]
-    public void Setup()
-    {
-        
-    }
+    private ServiceProvider provider = SampleServiceProvider.ServiceProvider;
 
     [Test]
     public void SendAndReceiveOnce()
     {
         //Arrange
-        var Sender = (ITcpSenderService)SampleServiceProvider.ServiceProvider.GetService(typeof(ITcpSenderService))!;
-        var Receiver = (ITcpListenerService)SampleServiceProvider.ServiceProvider.GetService(typeof(ITcpListenerService))!;
+        var Sender = (ITcpSenderService)provider.GetService(typeof(ITcpSenderService))!;
+        var Receiver = (ITcpListenerService)provider.GetService(typeof(ITcpListenerService))!;
         string expectedPayload = "Hello";
         IPEndPoint endPoint = new(IPAddress.Parse("127.0.0.1"), 1);
-        var stringQueueReceiver = (StringQueueReceiver)SampleServiceProvider.ServiceProvider.GetService(typeof(StringQueueReceiver))!;
+        var stringQueueReceiver = (StringQueueReceiver)provider.GetService(typeof(StringQueueReceiver))!;
 
         //Act
         Task.Run(() => Receiver!.ReceiveOnce(endPoint));
         Sender!.Send(endPoint, expectedPayload);
-        Thread.Sleep(10);
+        Thread.Sleep(100);
         string actualPayload = stringQueueReceiver.StringQueue.Dequeue();
 
         //Assert
@@ -39,16 +35,16 @@ public class TcpTests
     public void SendAndReceiveContinuously()
     {
         //Arrange
-        var Sender = (ITcpSenderService)SampleServiceProvider.ServiceProvider.GetService(typeof(ITcpSenderService))!;
-        var Receiver = (ITcpListenerService)SampleServiceProvider.ServiceProvider.GetService(typeof(ITcpListenerService))!;
+        var Sender = (ITcpSenderService)provider.GetService(typeof(ITcpSenderService))!;
+        var Receiver = (ITcpListenerService)provider.GetService(typeof(ITcpListenerService))!;
         string expectedPayload = "Hello";
         IPEndPoint endPoint = new(IPAddress.Parse("127.0.0.1"), 1);
-        var stringQueueReceiver = (StringQueueReceiver)SampleServiceProvider.ServiceProvider.GetService(typeof(StringQueueReceiver))!;
+        var stringQueueReceiver = (StringQueueReceiver)provider.GetService(typeof(StringQueueReceiver))!;
 
         //Act
         Receiver!.StartContinuousReceivingAsync(endPoint);
         Sender!.Send(endPoint, expectedPayload);
-        Thread.Sleep(10);
+        Thread.Sleep(100);
         string actualPayload = stringQueueReceiver.StringQueue.Dequeue();
 
         //Assert

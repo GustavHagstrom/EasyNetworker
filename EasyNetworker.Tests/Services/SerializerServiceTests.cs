@@ -1,21 +1,13 @@
-﻿using EasyNetworker.Models;
-using EasyNetworker.Services;
+﻿using EasyNetworker.Services;
 using EasyNetworker.Tests.SampleData;
 using EasyNetworker.Utilities;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
 
 namespace EasyNetworker.Tests.Services;
 public class SerializerServiceTests
 {
-    [SetUp]
-    public void Setup()
-    {
-        Mappings.Instance.Register<SampleStringHandler, string>();
-    }
-
+    private ServiceProvider provider = SampleServiceProvider.ServiceProvider;
     [Test]
     public void SerializeAndDeserializeTest()
     {

@@ -1,18 +1,22 @@
 ﻿using EasyNetworker.Abstractions;
+using EasyNetworker.Models;
+using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
+using System.Text.Json;
 
 namespace EasyNetworker.Services;
 public class TcpListenerService : ITcpListenerService
 {
     private readonly IHandlerInvokerService handlerInvokerService;
-    private readonly ISerializerService serializerService;
+    private readonly IPacketGeneratorService packetGeneratorService;
 
     private TcpListener? Client { get; set; }
-    public TcpListenerService(IHandlerInvokerService handlerInvokerService, ISerializerService serializerService)
+    public TcpListenerService(IHandlerInvokerService handlerInvokerService, IPacketGeneratorService packetGeneratorService)
     {
         this.handlerInvokerService = handlerInvokerService;
-        this.serializerService = serializerService;
+        this.packetGeneratorService = packetGeneratorService;
     }
     public void ReceiveOnce(IPEndPoint localEndPoint)
     {
@@ -33,21 +37,24 @@ public class TcpListenerService : ITcpListenerService
     }
     private void ReceiveAndInvokeHandler(TcpClient client)
     {
-        List<byte> receivedBytes = new();
-        receivedBytes.AddRange(FillBuffer(client));
-        int id = BitConverter.ToInt32(receivedBytes.Take(4).ToArray());
-        int length = BitConverter.ToInt32(receivedBytes.Skip(4).Take(4).ToArray());
-        while (receivedBytes.Count < length)
-        {
-            receivedBytes.AddRange(FillBuffer(client));
-        }
-        object receivedObject = serializerService.DeserializeReceivedBytes(receivedBytes.ToArray());
-        handlerInvokerService.Invoke(receivedObject, id);
+        byte[] receivedBytes = GetReceivedBytes(client);
+        var packet = packetGeneratorService.Generate(receivedBytes);
+        handlerInvokerService.Invoke(packet);
         client.Dispose();
     }
-    private byte[] FillBuffer(TcpClient client)
+    private byte[] GetReceivedBytes(TcpClient client)
     {
+        List<byte> receivedBytes = new();
         var stream = client.GetStream();
+        receivedBytes.AddRange(FillBuffer(stream));
+        while (stream.DataAvailable)
+        {
+            receivedBytes.AddRange(FillBuffer(stream));
+        }
+        return receivedBytes.ToArray();
+    }
+    private byte[] FillBuffer(NetworkStream stream)
+    {
         byte[] buffer = new byte[8192];
         stream.Read(buffer, 0, buffer.Length);
         return buffer;

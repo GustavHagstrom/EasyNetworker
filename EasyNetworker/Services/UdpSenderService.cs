@@ -1,26 +1,27 @@
 ﻿using EasyNetworker.Abstractions;
+using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Sockets;
 
 namespace EasyNetworker.Services;
 public class UdpSenderService : IUdpSenderService
 {
-    private readonly ISerializerService serializerService;
+    private readonly IPacketGeneratorService packetGeneratorService;
 
-    public UdpSenderService(ISerializerService serializerService)
+    public UdpSenderService(IPacketGeneratorService packetGeneratorService)
     {
-        this.serializerService = serializerService;
+        this.packetGeneratorService = packetGeneratorService;
     }
     public async Task SendAsync<T>(IPEndPoint remoteEndPoint, T paylaod)
     {
         await Task.Run(() => Send(remoteEndPoint, paylaod));
     }
-    public void Send<T>(IPEndPoint remoteEndPoint, T paylaod)
+    public void Send<T>(IPEndPoint remoteEndPoint, T payload)
     {
         using (var udp = new UdpClient())
         {
-            var bytesToSend = serializerService.SerializePayload(paylaod);
-            udp.Send(bytesToSend, bytesToSend.Length, remoteEndPoint);
+            var packetBytes = packetGeneratorService.GenerateAsByteArray(payload);
+            udp.Send(packetBytes, packetBytes.Length, remoteEndPoint);
         }
     }
 }

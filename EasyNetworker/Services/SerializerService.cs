@@ -1,38 +1,24 @@
 ﻿using EasyNetworker.Abstractions;
-using EasyNetworker.Exceptions;
-using EasyNetworker.Utilities;
-using System.Text;
 using System.Text.Json;
 
 namespace EasyNetworker.Services;
 public class SerializerService : ISerializerService
 {
-    public byte[] SerializePayload<T>(T payload)
+    private const int EndValue = 1;
+    public byte[] Serialize<T>(T payload)
     {
-        int id = Mappings.Instance.GetPayloadId<T>();
-        var jsonData = JsonSerializer.Serialize(payload);
-        byte[] idBytes = BitConverter.GetBytes(id);
-        byte[] jsonDataBytes = Encoding.UTF8.GetBytes(jsonData);
-        int length = idBytes.Length + jsonDataBytes.Length + 4;
-        byte[] lengthBytes = BitConverter.GetBytes(length);
-        //length = BitConverter.ToInt32(lengthBytes, 0);
-        List<byte> bytes = new List<byte>();
-        bytes.AddRange(idBytes);
-        bytes.AddRange(lengthBytes);
-        bytes.AddRange(jsonDataBytes);
-        
-
-        return bytes.ToArray();
+        return JsonSerializer.SerializeToUtf8Bytes(payload).Concat(BitConverter.GetBytes(EndValue)).ToArray();
     }
-    public object DeserializeReceivedBytes(byte[] receivedBytes)
+    public T Deserialize<T>(byte[] dataBytes)
     {
-        int id = BitConverter.ToInt32(receivedBytes.Take(4).ToArray(), 0);
-        int length = BitConverter.ToInt32(receivedBytes.Skip(4).Take(4).ToArray(), 0);
-        var jsonString = Encoding.UTF8.GetString(receivedBytes.Skip(8).Take(length-8).ToArray());
-        //if (receivedBytes.Length != length)
-        //{
-        //    throw new PacketLossException($"Packetlength \"{receivedBytes.Length}\" do not match expected length of: \"{length}\"");
-        //}
-        return JsonSerializer.Deserialize(jsonString, Mappings.Instance.GetPayloadType(id))!;
+        var index = Array.LastIndexOf(dataBytes, Convert.ToByte(EndValue));
+        var usedBytes = dataBytes.Take(index).ToArray();
+        return JsonSerializer.Deserialize<T>(usedBytes)!;
+    }
+    public object? Deserialize(byte[] dataBytes, Type returnType)
+    {
+        var index = Array.LastIndexOf(dataBytes, Convert.ToByte(EndValue));
+        var usedBytes = dataBytes.Take(index).ToArray();
+        return JsonSerializer.Deserialize(usedBytes, returnType);
     }
 }

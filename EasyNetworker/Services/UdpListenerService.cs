@@ -1,5 +1,6 @@
 ﻿using EasyNetworker.Abstractions;
 using EasyNetworker.Models;
+using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Net.Sockets;
 
@@ -7,12 +8,12 @@ namespace EasyNetworker.Services;
 public class UdpListenerService : IUdpListenerService
 {
     private readonly IHandlerInvokerService handlerInvokerService;
-    private readonly ISerializerService serializerService;
+    private readonly IPacketGeneratorService packetGeneratorService;
 
-    public UdpListenerService(IHandlerInvokerService handlerInvokerService, ISerializerService serializerService)
+    public UdpListenerService(IHandlerInvokerService handlerInvokerService, IPacketGeneratorService packetGeneratorService)
     {
         this.handlerInvokerService = handlerInvokerService;
-        this.serializerService = serializerService;
+        this.packetGeneratorService = packetGeneratorService;
     }
     public void ReceiveOnce(IPEndPoint localEndPoint)
     {
@@ -35,8 +36,7 @@ public class UdpListenerService : IUdpListenerService
     }
     private void InvokeHandler(byte[] receivedBytes)
     {
-        int id = BitConverter.ToInt32(receivedBytes.Take(4).ToArray());
-        object receivedObject = serializerService.DeserializeReceivedBytes(receivedBytes);
-        handlerInvokerService.Invoke(receivedObject, id);
+        var packet = packetGeneratorService.Generate(receivedBytes);
+        handlerInvokerService.Invoke(packet);
     }
 }

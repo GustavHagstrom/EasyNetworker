@@ -1,10 +1,14 @@
 ﻿using EasyNetworker.Abstractions;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace EasyNetworker.Tests.SampleData;
-public class SampleStringHandler : IPacketHandler<string>
+public class SampleStringHandlerTwo : IPacketHandler<string>
 {
-    public SampleStringHandler(StringQueueReceiver stringQueueReceiver)
+    public SampleStringHandlerTwo(StringQueueReceiver stringQueueReceiver)
     {
         StringQueueReceiver = stringQueueReceiver;
     }

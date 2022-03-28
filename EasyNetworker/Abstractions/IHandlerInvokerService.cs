@@ -1,8 +1,9 @@
 ﻿using EasyNetworker.Models;
+using System.Net;
 
 namespace EasyNetworker.Abstractions;
 
 public interface IHandlerInvokerService
 {
-    void Invoke(Packet basePacket);
+    void Invoke(Packet packet, EndPoint senderEndPoint);
 }

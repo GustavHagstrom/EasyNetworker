@@ -20,7 +20,7 @@ public class UdpListenerService : IUdpListenerService
         using (var client = new UdpClient(localEndPoint))
         {
             var bytes = client.Receive(ref localEndPoint);
-            InvokeHandler(bytes);
+            InvokeHandler(bytes, new IPEndPoint(localEndPoint.Address, localEndPoint.Port));
         }
     }
     public async Task StartContinuousReceiving(IPEndPoint localEndPoint, CancellationToken? cancellationToken = null)
@@ -30,13 +30,13 @@ public class UdpListenerService : IUdpListenerService
             while (cancellationToken?.IsCancellationRequested == false || cancellationToken == null)
             {
                 var result = await client.ReceiveAsync();
-                _ = Task.Run(() => InvokeHandler(result.Buffer));
+                _ = Task.Run(() => InvokeHandler(result.Buffer, new IPEndPoint(localEndPoint.Address, localEndPoint.Port)));
             }
         }
     }
-    private void InvokeHandler(byte[] receivedBytes)
+    private void InvokeHandler(byte[] receivedBytes, EndPoint remoteEndPoint)
     {
         var packet = packetGeneratorService.Generate(receivedBytes);
-        handlerInvokerService.Invoke(packet);
+        handlerInvokerService.Invoke(packet, remoteEndPoint);
     }
 }

@@ -22,7 +22,7 @@ public static class ServiceCollectionExtension
         
         return services;
     }
-    public static IServiceCollection RegisterPacketHandler<THandler, Payload>(this IServiceCollection services) where THandler : IPacketHandler<Payload>
+    public static IServiceCollection RegisterPacketHandler<THandler, Payload>(this IServiceCollection services) where THandler : IPayloadHandler<Payload>
     {
         Mappings.Instance.Register<THandler, Payload>();
         services.AddTransient(typeof(THandler));

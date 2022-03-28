@@ -9,7 +9,7 @@ public class Mappings
     private Dictionary<string, HandlePayloadDescription> DescriptionMap { get; } = new();
     private Dictionary<Type, string> PayloadIdMap { get; } = new();
     private Dictionary<string, Type> IdPayloadMap { get; } = new();
-    public void Register<THandler, Payload>() where THandler : IPacketHandler<Payload>
+    public void Register<THandler, Payload>() where THandler : IPayloadHandler<Payload>
     {
         string id = typeof(THandler).FullName!;
         DescriptionMap.Add(id, new() {PayloadType = typeof(Payload), HandlerType = typeof(THandler) });

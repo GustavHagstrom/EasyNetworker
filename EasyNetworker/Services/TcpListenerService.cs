@@ -39,7 +39,7 @@ public class TcpListenerService : ITcpListenerService
     {
         byte[] receivedBytes = GetReceivedBytes(client);
         var packet = packetGeneratorService.Generate(receivedBytes);
-        handlerInvokerService.Invoke(packet);
+        handlerInvokerService.Invoke(packet, client.Client.RemoteEndPoint!);
         client.Dispose();
     }
     private byte[] GetReceivedBytes(TcpClient client)

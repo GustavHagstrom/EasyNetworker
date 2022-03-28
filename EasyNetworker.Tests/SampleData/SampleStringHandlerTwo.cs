@@ -1,12 +1,8 @@
 ﻿using EasyNetworker.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net;
 
 namespace EasyNetworker.Tests.SampleData;
-public class SampleStringHandlerTwo : IPacketHandler<string>
+public class SampleStringHandlerTwo : IPayloadHandler<string>
 {
     public SampleStringHandlerTwo(StringQueueReceiver stringQueueReceiver)
     {
@@ -15,8 +11,9 @@ public class SampleStringHandlerTwo : IPacketHandler<string>
 
     public StringQueueReceiver StringQueueReceiver { get; }
 
-    public void Handle(string packet)
+
+    public void Handle(string payload, EndPoint senderEndPoint)
     {
-        StringQueueReceiver.StringQueue.Enqueue(packet);
+        StringQueueReceiver.StringQueue.Enqueue(payload);
     }
 }

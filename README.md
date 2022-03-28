@@ -4,11 +4,11 @@ A simple labrary for TCP and UDP networking.
 Used with dependency injection using Micrsoft.Extensions.DependencyInjection.ServiceCollection
 
 # Get started
-* Create packethandlers inheriting IPacketHandler\<Payload\> interface
+* Create packethandlers inheriting IPayloadHandler\<Payload\> interface
  ````csharp
-public class MessagePacketHandler : IPacketHandler<MessagePacket>
+public class MessageHandler : IPayloadHandler<Message>
 {
-    public void Handle(MessagePacket packet)
+    public void Handle(Message packet)
     {
         Console.WriteLine(packet.Message);
     }
@@ -20,7 +20,7 @@ public class MessagePacketHandler : IPacketHandler<MessagePacket>
 ````
 * Register PacketHandler with associated payload in your ServiceCollection
  ````csharp
- Services.RegisterPacketHandler<MessagePacketHandler, MessagePacket>();
+ Services.RegisterPacketHandler<MessageHandler, Message>();
 ````
 * Sending
 ````csharp
@@ -36,11 +36,11 @@ public class SampleClass
   }
   public async Task SendSampleTcpMessageAsync(string message)
   {
-    await _networkerClient.SendTcpAsync(_sampleEndPoint, new MessagePacket{ Message = "Hello world!" });
+    await _networkerClient.SendTcpAsync(_sampleEndPoint, new Message{ Message = "Hello world!" });
   }
   public void SendSampleUdpMessage(string message)
   {
-    _networkerClient.SendUdp(_sampleEndPoint, new MessagePacket{ Message = "Hello world!" });
+    _networkerClient.SendUdp(_sampleEndPoint, new Message{ Message = "Hello world!" });
   }
 }
 ````

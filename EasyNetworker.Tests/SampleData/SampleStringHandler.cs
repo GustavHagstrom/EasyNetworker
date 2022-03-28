@@ -1,8 +1,9 @@
 ﻿using EasyNetworker.Abstractions;
 using System;
+using System.Net;
 
 namespace EasyNetworker.Tests.SampleData;
-public class SampleStringHandler : IPacketHandler<string>
+public class SampleStringHandler : IPayloadHandler<string>
 {
     public SampleStringHandler(StringQueueReceiver stringQueueReceiver)
     {
@@ -11,8 +12,8 @@ public class SampleStringHandler : IPacketHandler<string>
 
     public StringQueueReceiver StringQueueReceiver { get; }
 
-    public void Handle(string packet)
+    public void Handle(string payload, EndPoint senderEndPoint)
     {
-        StringQueueReceiver.StringQueue.Enqueue(packet);
+        StringQueueReceiver.StringQueue.Enqueue(payload);
     }
 }

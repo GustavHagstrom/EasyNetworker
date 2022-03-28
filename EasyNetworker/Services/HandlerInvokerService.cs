@@ -2,7 +2,7 @@
 using EasyNetworker.Exceptions;
 using EasyNetworker.Models;
 using EasyNetworker.Utilities;
-using System.Text.Json;
+using System.Net;
 
 namespace EasyNetworker.Services;
 public class HandlerInvokerService : IHandlerInvokerService
@@ -16,14 +16,14 @@ public class HandlerInvokerService : IHandlerInvokerService
         this.serviceFactory = serviceFactory;
         this.serializerService = serializerService;
     }
-    public void Invoke(Packet packet)
+    public void Invoke(Packet packet, EndPoint senderEndPoint)
     {
         var payload = serializerService.Deserialize(packet.Payload, Mappings.Instance.GetPayloadType(packet.Id)); 
         var description = Mappings.Instance.GetPacketsDescription(packet.Id);
         var handler = serviceFactory(description.HandlerType!);
         try
         {
-            handler?.GetType().GetMethod(HandleMethodName)?.Invoke(handler, new object[] { payload! });
+            handler?.GetType().GetMethod(HandleMethodName)?.Invoke(handler, new object[] { payload!, senderEndPoint });
         }
         catch (Exception e)
         {
